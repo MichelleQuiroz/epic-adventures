@@ -4,17 +4,26 @@ using UnityEngine;
 
 public class RubyController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+   
 
     // Update is called once per frame
+    /// <summary>
+	/// Update allows player to move Ruby along the x and y axis
+	/// Input.GetAxis, transform.position, and Time.deltaTime are recognized by Unity
+	/// </summary>
+    #region Update Movement
     void Update()
     {
-        Vector2 position = transform.position;
-        position.x = position.x + 0.01f;
-        transform.position = position;
+        
+        float moveleft_and_right = Input.GetAxis("Horizontal");
+        float moveup_and_down = Input.GetAxis("Vertical");
+
+        Vector2 movingRuby = transform.position;
+
+        movingRuby.x = movingRuby.x + 0.1f * moveleft_and_right * Time.deltaTime;
+        movingRuby.y = movingRuby.y + 0.1f * moveup_and_down * Time.deltaTime;
+
+        transform.position = movingRuby;
     }
+    #endregion
 }
