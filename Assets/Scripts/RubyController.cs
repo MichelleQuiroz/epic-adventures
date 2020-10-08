@@ -20,8 +20,8 @@ public class RubyController : MonoBehaviour
 
         Vector2 movingRuby = transform.position;
 
-        movingRuby.x = movingRuby.x + 0.1f * moveleft_and_right * Time.deltaTime;
-        movingRuby.y = movingRuby.y + 0.1f * moveup_and_down * Time.deltaTime;
+        movingRuby.x = movingRuby.x + 1f * moveleft_and_right * Time.deltaTime;
+        movingRuby.y = movingRuby.y + 1f * moveup_and_down * Time.deltaTime;
 
         transform.position = movingRuby;
     }
