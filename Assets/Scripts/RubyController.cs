@@ -4,26 +4,63 @@ using UnityEngine;
 
 public class RubyController : MonoBehaviour
 {
-   
+    public float speed = 3.0f;
+
+    public int maxHealth = 5;
+    public float timeInvincible = 2.0f;//seconds of invicncibility time
+
+    public int health { get { return currentHealth; } }
+    int currentHealth;
+
+    bool isInvincible;
+    float invincibleTimer;
+
+    Rigidbody2D rigidbody2d;
+    float horizontal;
+    float vertical;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        rigidbody2d = GetComponent<Rigidbody2D>();
+        currentHealth = maxHealth;
+    }
 
     // Update is called once per frame
-    /// <summary>
-	/// Update allows player to move Ruby along the x and y axis
-	/// Input.GetAxis, transform.position, and Time.deltaTime are recognized by Unity
-	/// </summary>
-    #region Update Movement
     void Update()
     {
-        
-        float moveleft_and_right = Input.GetAxis("Horizontal");
-        float moveup_and_down = Input.GetAxis("Vertical");
+        horizontal = Input.GetAxis("Horizontal");
+        vertical = Input.GetAxis("Vertical");
 
-        Vector2 movingRuby = transform.position;
-
-        movingRuby.x = movingRuby.x + 1f * moveleft_and_right * Time.deltaTime;
-        movingRuby.y = movingRuby.y + 1f * moveup_and_down * Time.deltaTime;
-
-        transform.position = movingRuby;
+        if (isInvincible)
+        {
+            invincibleTimer -= Time.deltaTime;
+            if (invincibleTimer < 0)
+                isInvincible = false;
+        }
     }
-    #endregion
+
+    void FixedUpdate()
+    {
+        Vector2 position = rigidbody2d.position;
+        position.x = position.x + speed * horizontal * Time.deltaTime;
+        position.y = position.y + speed * vertical * Time.deltaTime;
+
+        rigidbody2d.MovePosition(position);
+    }
+
+    public void ChangeHealth(int amount)
+    {
+        if (amount < 0)
+        {
+            if (isInvincible)
+                return;
+
+            isInvincible = true;
+            invincibleTimer = timeInvincible;
+        }
+
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        Debug.Log(currentHealth + "/" + maxHealth);
+    }
 }
